@@ -15,14 +15,12 @@ function App() {
       text: input.current.value,
       adapter: 'midi',
     };
-    const endpoint = 'https://f0331cf11487.ngrok.io/api/v1/interpetor';
-
-    // Content-Type: application/json" -d '{"text": "sos", "adapter": "printer"}' http://ac32ccc687fa.ngrok.io/api/v1/interpetor
+    const endpoint = `${process.env.REACT_APP_API_URL}/api/v1/interpetor`;
 
     axios
       .post(endpoint, payload)
       .then((result) => {
-        alert(result);
+        console.log(result);
         enableButton(submitBtn.current);
       })
       .catch((error) => {
