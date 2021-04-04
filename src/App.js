@@ -11,6 +11,8 @@ function App() {
   const onPlay = (e) => {
     e.preventDefault();
 
+    console.log('Playing!', input.current.value);
+
     const btnRef = submitBtn;
     disableButton(btnRef);
 
@@ -23,7 +25,6 @@ function App() {
     axios
       .post(endpoint, payload)
       .then((result) => {
-        console.log(result);
         enableButton(btnRef);
       })
       .catch((error) => {
@@ -34,6 +35,8 @@ function App() {
 
   const onConvert = (e) => {
     e.preventDefault();
+
+    console.log('Converting!', input.current.value);
 
     const btnRef = convertBtn;
     disableButton(btnRef);
@@ -46,7 +49,6 @@ function App() {
     axios
       .post(endpoint, payload)
       .then((result) => {
-        console.log(result);
         setConvertedText(result.data.text);
         enableButton(btnRef);
       })
@@ -69,18 +71,18 @@ function App() {
   return (
     <div className='App'>
       <header className='App-header'>
-        <p>Convert to Morse!</p>
+        <h1>Convert to Morse!</h1>
         <form>
           <input type='text' name='phrase' ref={input} />
 
           <br />
-          <input type='submit' value='Play' ref={submitBtn} onClick={onPlay} />
           <input
             type='submit'
             value='Convert'
             ref={convertBtn}
             onClick={onConvert}
           />
+          <input type='submit' value='Play' ref={submitBtn} onClick={onPlay} />
 
           <pre>{convertedText}</pre>
         </form>
