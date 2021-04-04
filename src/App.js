@@ -1,15 +1,18 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
 function App() {
   const input = useRef();
   const submitBtn = useRef();
+  const convertBtn = useRef();
+  const [convertedText, setConvertedText] = useState('');
 
-  const onSubmit = (e) => {
+  const onPlay = (e) => {
     e.preventDefault();
 
-    disableButton(submitBtn.current);
+    const btnRef = submitBtn;
+    disableButton(btnRef);
 
     const payload = {
       text: input.current.value,
@@ -21,32 +24,65 @@ function App() {
       .post(endpoint, payload)
       .then((result) => {
         console.log(result);
-        enableButton(submitBtn.current);
+        enableButton(btnRef);
       })
       .catch((error) => {
         console.log(error);
-        enableButton(submitBtn.current);
+        enableButton(btnRef);
       });
   };
 
-  const disableButton = (btn) => {
-    btn.disabled = true;
-    btn.classList.add('disabled');
+  const onConvert = (e) => {
+    e.preventDefault();
+
+    const btnRef = convertBtn;
+    disableButton(btnRef);
+
+    const payload = {
+      text: input.current.value,
+    };
+    const endpoint = `${process.env.REACT_APP_API_URL}/api/v1/encode`;
+
+    axios
+      .post(endpoint, payload)
+      .then((result) => {
+        console.log(result);
+        setConvertedText(result.data.text);
+        enableButton(btnRef);
+      })
+      .catch((error) => {
+        console.log(error);
+        enableButton(btnRef);
+      });
   };
 
-  const enableButton = (btn) => {
-    btn.disabled = false;
-    btn.classList.remove('disabled');
+  const disableButton = (btnRef) => {
+    btnRef.current.disabled = true;
+    btnRef.current.classList.add('disabled');
+  };
+
+  const enableButton = (btnRef) => {
+    btnRef.current.disabled = false;
+    btnRef.current.classList.remove('disabled');
   };
 
   return (
     <div className='App'>
       <header className='App-header'>
         <p>Convert to Morse!</p>
-        <form onSubmit={onSubmit} data-confirm='Really?'>
+        <form>
           <input type='text' name='phrase' ref={input} />
+
           <br />
-          <input type='submit' value='Submit' ref={submitBtn} />
+          <input type='submit' value='Play' ref={submitBtn} onClick={onPlay} />
+          <input
+            type='submit'
+            value='Convert'
+            ref={convertBtn}
+            onClick={onConvert}
+          />
+
+          <pre>{convertedText}</pre>
         </form>
       </header>
     </div>
