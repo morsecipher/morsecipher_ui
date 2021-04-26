@@ -18,7 +18,7 @@ function App() {
 
     const payload = {
       text: input.current.value,
-      adapter: 'midi',
+      adapter: 'verbalizer',
     };
     const endpoint = `${process.env.REACT_APP_API_URL}/api/v1/interpetor`;
 
