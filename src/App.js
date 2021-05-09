@@ -25,10 +25,11 @@ function App() {
     axios
       .post(endpoint, payload)
       .then((result) => {
+        setConvertedText(`=> ${result.data.msg}`)
         enableButton(btnRef);
       })
       .catch((error) => {
-        console.log(error);
+        setConvertedText(`=> ${error.response.data.msg}`)
         enableButton(btnRef);
       });
   };
